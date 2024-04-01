@@ -1,0 +1,26 @@
+q1.retreive all the category names under the parent category_id=1(use sub query)?
+select name from categories where category_id in (select category_id from categories where parent_category=1);
+
+
+q2.retreive all products in the iphone and laptops category(use sub queries)?
+select name from products  where category_id in(select category_id from categories where name in('iphones','laptops'));
+
+
+q3.retreive all products with prices greater than any product on the console category?
+select category_id from categories where name='consoles'; (category id)
+select price from products where category_id=(select category_id from categories where name ='consoles'); (price)
+select * from products where price> any (select price from products where category_id=(select category_id from categories where name ='consoles'));
+
+q4.reterive all product with prices greater than all products in console category?
+select * from products where price> all (select price from products where category_id=(select category_id from categories where name ='consoles'));
+
+q5.reterive all categories that are having any products?
+
+
+EXISTS AND NOT EXISTS;
+
+select * from categories as c where exists(select * from products as p where p.category_id=c.category_id);
+mysql> select * from categories as c where not exists(select * from products as p where p.category_id=c.category_id);
+
+
+
