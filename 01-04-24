@@ -69,6 +69,99 @@ DECLARE CAT_NAME VARCHAR(50)
 END
 
 eg:DELIMITER $$
+CREATE FUNCTION getcategoryname(cat_id int)
+RETURNS VARCHAR(50) READS SQL DATA 
+BEGIN
+DECLARE cat_name VARCHAR(50);
+SELECT NAME INTO cat_name FROM categories WHERE category_id=cat_id;
+RETURN(cat_name);
+END$$
+DELIMITER;
+
+TRIGER-is a kind of function.but automatical executed(automatical call in database)
+whenever a event occur it will automatical call
+update,insert,delect these are all functions(events)
+there is no return.it is a group of functions
+
+CALL FUNCTION-select getcategoryname(3) as category_name;
+STORED PROCEDURE
+--------------
+delimiter $$
+create procedure addproducts(IN pname varchar(50),IN price decimal(6,2),IN pcategory_id int)
+BEGIN
+insert into products(name,price,category_id)values(pname,pprice,pcategory_id);
+end$$
+delimiter ;
+
+HOW CAN RETURN MULTIPLE VALUES?
+delimiter $$                                                                                                                               
+Q.create procedure addproducts(IN pname varchar(50),IN pprice decimal(6,2),IN pcategory_id int) BEGIN insert into products(name,price,category_id)values(pname,pprice,pcategory_id);
+end$$
+delimiter ;
+
+Q. create a mysql stored processor named add product that inserts a new product into the products table with the provided name price and category_id?
+CALL addproducts('HP Laptop',1299.00,1);
+select * from products;
+
+Q.create a msql stored procedure named get product count by category that takes category_id as input and retutns the count of products belonging that category as output?
+delimiter $$                                                                                                                               
+ create procedure getproductcountbycategory(IN pcategory_id int,OUT pcount int)
+    begin
+    declare prod_count int;
+    select count(*) into prod_count from products where category_id=pcategoryid;
+    set pcount=prod_count;
+end$$
+delimiter;
+
+
+
+AUTO INCREMENT:
+alter table products modify product_id int auto_increment;
+
+member(varchar(20))->member ENUM
+
+UNION OPERATION
+------------
+IT AUTOMATICAL ELIMINATE ITS DUPLICATE
+
+UNIONALL
+-------
+
+
+q6.reterive all category name and product name?
+select name from categories union select name from products;
+select name from categories union all select name from products;
+
+
+VIEWS
+------
+view is known as virtual table.
+table is an physical object but view is a logical object.
+it gives security purpose 
+if we take a join data in multiple tables we can create view
+whenever use view that will work it cannot store in any database
+
+select * from categories join products on categories.category_id=products.category_id;(X)
+select * from categories left outer join products on categories.category_id=products.category_id;
+
+ create view product_category as(select c.category_id,c.name as category_name,c.parent_category,p.product_id,p.name as product_name,p.price,p.quantity from categories as c  left outer join products as p on c.category_id=p.category_id);
+
+select * from product_category;
+
+STORED FUNCTIONS
+---------------
+
+PL/SQL(LANGUAGE)
+
+CREATE FUNCTION<FN>(ARGUMENTS GIVEN Eg:CAT_ID INT,,,,,(<ATTRIBUTE NAME><DATATYPE>))
+RETURNS VARCHAR -> This is a function header
+BEGIN
+DECLARE CAT_NAME VARCHAR(50)
+------------
+----------
+END
+
+eg:DELIMITER $$
 CREATE FUNCTION GETCATEGORYNAME(CAT_ID INT)
 RETURNS VARCHAR(50)
 BEGIN
