@@ -115,67 +115,6 @@ delimiter;
 
 
 
-AUTO INCREMENT:
-alter table products modify product_id int auto_increment;
-
-member(varchar(20))->member ENUM
-
-UNION OPERATION
-------------
-IT AUTOMATICAL ELIMINATE ITS DUPLICATE
-
-UNIONALL
--------
-
-
-q6.reterive all category name and product name?
-select name from categories union select name from products;
-select name from categories union all select name from products;
-
-
-VIEWS
-------
-view is known as virtual table.
-table is an physical object but view is a logical object.
-it gives security purpose 
-if we take a join data in multiple tables we can create view
-whenever use view that will work it cannot store in any database
-
-select * from categories join products on categories.category_id=products.category_id;(X)
-select * from categories left outer join products on categories.category_id=products.category_id;
-
- create view product_category as(select c.category_id,c.name as category_name,c.parent_category,p.product_id,p.name as product_name,p.price,p.quantity from categories as c  left outer join products as p on c.category_id=p.category_id);
-
-select * from product_category;
-
-STORED FUNCTIONS
----------------
-
-PL/SQL(LANGUAGE)
-
-CREATE FUNCTION<FN>(ARGUMENTS GIVEN Eg:CAT_ID INT,,,,,(<ATTRIBUTE NAME><DATATYPE>))
-RETURNS VARCHAR -> This is a function header
-BEGIN
-DECLARE CAT_NAME VARCHAR(50)
-------------
-----------
-END
-
-eg:DELIMITER $$
-CREATE FUNCTION GETCATEGORYNAME(CAT_ID INT)
-RETURNS VARCHAR(50)
-BEGIN
-DECLARE CAT_NAME VARCHAR(50);
-SELECT NAME INTO CAT_NAME FROM CATEGORIES WHERE CATEGORY_ID=CAT_ID;
-RETURN(CAT_NAME);
-END$$
-DELIMITER;
-
-TRIGER-is a kind of function.but automatical executed(automatical call in database)
-whenever a event occur it will automatical call
-update,insert,delect these are all functions(events)
-there is no return.it is a group of functions
-
 
 
 
