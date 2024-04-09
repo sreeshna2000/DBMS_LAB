@@ -83,7 +83,46 @@ whenever a event occur it will automatical call
 update,insert,delect these are all functions(events)
 there is no return.it is a group of functions
 
+events:insert,delete,update
+time:before/after event occur in db ;
+before insert/after insert
+"   delete   /  "   delete
+ "   update   / "   update
+
+NEW AND OLD-predefined data variables
+
+NEW-insert ((eg:NEW.rollno)  latest rollno)
+OLD-delete ((eg:OLD.rollno) recover the attribute)
+NEW AND OLD-update
+
+create trigger<tn>
+before/after [event]on <table name>
+for each row
+begin
+-------
+------
+end
+
+
+Q.create a msql trigger named update product price that automatically updates the price of the product in the products table to a default value of 0 if the price is set to null during insert or update?
+
+delimiter $$
+create trigger updateproductprice
+before insert on products
+for each row
+begin
+if new.price is null then
+set new.price=0;
+end if;
+end$$
+delimiter ;
+
+insert into products(product_id,name,category_id,quantity)values(9,'samsung 21',5,10); 
+select * from products;
+
+
 CALL FUNCTION-select getcategoryname(3) as category_name;
+
 STORED PROCEDURE
 --------------
 delimiter $$
@@ -103,7 +142,7 @@ Q. create a mysql stored processor named add product that inserts a new product 
 CALL addproducts('HP Laptop',1299.00,1);
 select * from products;
 
-Q.create a msql stored procedure named get product count by category that takes category_id as input and retutns the count of products belonging that category as output?
+Q.create a mysql stored procedure named get product count by category that takes category_id as input and retutns the count of products belonging that category as output?
 delimiter $$                                                                                                                               
  create procedure getproductcountbycategory(IN pcategory_id int,OUT pcount int)
     begin
@@ -113,10 +152,43 @@ delimiter $$
 end$$
 delimiter;
 
+CURSOR
+-------
+database object
+by creating a object we have to create a buffer area
+it can use inside the function and procedure
+select query will give multiple records that can be store in the cursor
+1) declare-declare cursor(select)
+2) open-open cursor
+3) fetch-fetch each records,iterate for processing
+4) close-close cursor
 
 
+cursor display the list of student:
+1)declare <cn> cursor for 
+select <attributelist> from <table name> where <cond>
+2) open <cn>
+3) fetch <cn> into <varible name>
+4) close <cn>
 
-
+Q.write a mysql stored procedure named fetch category names that uses a cursor to fetch all category names from the categories table
+delimiter $$
+create procedure fetchcategorynames()
+begin
+declare catname varchar(50);
+declare finished int default 0;
+declare catcursor cursor for select name from categories;
+declare continue handler for not found set finished=1;
+open catcursor;
+read_loop:loop
+fetch name into catname;
+if finished then
+leave read_loop;
+end if;
+select catname as category_name;
+end loop;
+close catcursor;
+end $$
 
 
 
