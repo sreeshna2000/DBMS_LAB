@@ -181,7 +181,7 @@ declare catcursor cursor for select name from categories;
 declare continue handler for not found set finished=1;
 open catcursor;
 read_loop:loop
-fetch name into catname;
+fetch catcursor into catname;
 if finished then
 leave read_loop;
 end if;
@@ -190,12 +190,20 @@ end loop;
 close catcursor;
 end $$
 
+Q.create a mysql stored funtion named get product category that take a product_id as input and returns the category name of the correspon
+Q.create a mysql stored function named calculate discount that take a product price and returns the discounted price based on following criteria?
+  if product price less than 50 apply the discount 10%
+ if the product price between 50 and 100 apply a discount of 15%
+ if the product price is greater than 100 applu discount of 20%
+Q.create a mysql stored procedure name update product proces to update the price of the product in the products table with the provided category name and the % of increase
+Q.write a mysql stored procedure named print product details that uses a cursor to fetch and print the details (product_id,name,price) of all products from the products table
 
 
-
-
-
-
+extract month mm from given date
+extract date dd from given date
+extract year yyyy from given date
+get day from a given date
+get month mm from a given literal(eg:march-03)
 
 
 
