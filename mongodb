@@ -1,0 +1,44 @@
+Create a collection "categories" in MongoDB with documents to meets the following requirements:
+
+categories (category_id, name, parent_category, products (product_id, name, price, category_id, quantity))
+
+category_id (identifier for a category) is an integer field. name (name of the category) is a string field parent_category (identifier for referring a category) is an integer field. products is a subdocument with fields product_id  (identifier for a product) which is an integer field. name (name of the product) is a string field. price (price of the product) is a floating point field. category_id (identifier for a category) is an integer field. quantity (quantity available for the product) is an integer field
+
+Documents for categories is as follows:
+
+(1, Phones, NULL), (2, Laptops, NULL), (3, Consoles, NULL), (4, iPhone, 1), (5, Windows, 2), (6, Xbox, 3)
+
+Documents for products is as follows:
+
+(1, iPhone 12, 999.99, 4, 10), (2, MacBook Pro, 1999.99, 2, 5), (3, Dell XPS 15, 1599.99, 5, 8), (4, Sony PlayStation 5, 499.99, 3, 20), (5, Nintendo, 149.99, 3, 12), (6, Xbox Series X, 499.99, 6)
+
+Queries:
+
+1. List all products and its name.
+> db.categories.find({},{"products.product_id":1,"products.name":1,"_id":0})
+
+2. List all categories.
+> db.categories.find({},{"category_id":1,"name":1,"parent_category":1,"_id":0})
+
+
+3. List all categories for those do not have a parent category.
+> db.categories.find({},{"parent_category":null,"_id":0})
+
+4. List all products where the name starts with the letter â€˜Mâ€™ (include product_id, product name).
+> db.categories.find({"products.name":/^m/},{"products.product_id":1,"products.name":1,"_id":0})
+
+5. List all products that contain a letter â€˜oâ€™ anywhere in the name (include product_id, product name)
+> db.categories.find({"products.name":/m/},{"products.product_id":1,"products.name":1,"_id":0})
+
+6. List the products that do not have a parent category (include product_id, product name)
+> db.categories.find({"prarent_category":null},{"products.product_id":1,"products.name":1,"_id":0})
+
+7. Retrieve all products and their corresponding categories (include only product_id, product name, category name)
+> db.categories.find({},{"products.product_id":1,"products.name":1,"_id":0})
+
+8. List the products with a price greater than rupees 1000 order by its name in descending order. (include product_id, product name, price)
+> db.categories.find({"products.price":{$gt:1000}},{"products.product_id":1,"products.name":1,"products.price":1,"_id":0}).sort({"products.name":-1})
+
+9. Get the names of all products in the â€˜Consolesâ€™ category order by its name in descending order (include only product name).
+10. Retrieve the total count (give name â€˜total_countâ€™ for this column) of products in each category (include category_id, category name, total_count).
+11. Display category name and total quantities (give name â€˜total_qtyâ€™ for this column) of products in each category whose total quantity is greater than 15.
