@@ -29,7 +29,12 @@ db.categories.find({},{"products.product_id":1,"products.name":1,"_id":0}).sort(
 
 { "total_category" : 6 }
 
-> db.categories.aggregate([{$group:{"_id":"$parent_category","total_category":{$sum:1}}},{$project:{"_id":1,"total_category":1}}]);
+> db.categories.aggregate([{$group:{"_id":"$parent_category","total_category":{$sum:1}}},{$project:{"_id":1,"total_category":1}}])
+
+{ "_id" : null, "total_category" : 4 }
+{ "_id" : 1, "total_category" : 1 }
+{ "_id" : 2, "total_category" : 1 }
+
 
 
 > db.categories.find({},{"_id":0,"category_id":1,"products.product_id":1})
