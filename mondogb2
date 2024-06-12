@@ -1,0 +1,65 @@
+$push
+------
+> db.categories.update({"category_id":3},{$push:{"products":{"product_id":7,"name":"ibm","price":599.99,"quality":20}}})
+
+
+$and
+-----
+> db.categories.find({$and:[{"category_id=":{$ne:3}},{"products.price":{$lt:1500}}]},{"products.product_id":1,"products.name":1,"products.price":1,"_id":0})
+
+
+
+aggreagate
+-------
+db.categories.aggregate([{$match:{"category_id":3}},{$project:{"products.product_id":1,"products.name":1,"category_id":1,"_id":0}}])
+
+
+db.categories.aggregate([{$match:{"products.price":{$lt:1500}}},{$project:{"products.product_id":1,"products.name":1,"category_id":1,"products.price":1,"_id":0}}])
+
+db.categories.aggregate([{$match:{"products.quality":{$lt:15}}},{$project:{"products.product_id":1,"products.name":1,"category_id":1,"products.price":1,"products.quality":1,"_id":0}}])
+
+{ "category_id" : 2, "products" : [ { "product_id" : 2, "name" : "macbook pro", "price" : 1999.99, "quality" : 5 } ] }
+{ "category_id" : 3, "products" : [ { "product_id" : 5, "name" : "nintendo", "price" : 149.99, "quality" : 12 }, { "product_id" : 7, "name" : "ibm", "price" : 599.99, "quality" : 20 } ] }
+{ "category_id" : 4, "products" : [ { "product_id" : 1, "name" : "iphone", "price" : 999.99, "quality" : 10 } ] }
+{ "category_id" : 5, "products" : [ { "product_id" : 3, "name" : "dell xps 15", "price" : 1599.99, "quality" : 8 } ] }
+
+--------(20 is greaterthan 15 so we cannot do like this)-----------------------|^
+
+
+
+db.categories.aggregate([{$unwind:"$products"},{$match:{"products.quality":{$lt:15}}},{$project:{"products.product_id":1,"products.name":1,"products.quality":1,"_id":0}}])
+
+{ "products" : { "product_id" : 2, "name" : "macbook pro", "quality" : 5 } }
+{ "products" : { "product_id" : 5, "name" : "nintendo", "quality" : 12 } }
+{ "products" : { "product_id" : 1, "name" : "iphone", "quality" : 10 } }
+{ "products" : { "product_id" : 3, "name" : "dell xps 15", "quality" : 8 } }
+
+
+SORTING ORDER
+------------
+
+db.categories.aggregate([{$unwind:"$products"},{$match:{"products.quality":{$lt:15}}},{$project:{"products.product_id":1,"products.name":1,"products.quality":1,"_id":0}},{$sort:{"products.quality":1}}])
+
+{ "products" : { "product_id" : 2, "name" : "macbook pro", "quality" : 5 } }
+{ "products" : { "product_id" : 3, "name" : "dell xps 15", "quality" : 8 } }
+{ "products" : { "product_id" : 1, "name" : "iphone", "quality" : 10 } }
+{ "products" : { "product_id" : 5, "name" : "nintendo", "quality" : 12 } }
+
+
+RETRIEVE ALL THE PRODUCTS NAME,PRODUCTS_ID  SORTED IN ASCENGING ORDER?
+
+db.categories.find({},{"products.product_id":1,"products.name":1,"_id":0}).sort({"products.name":1,"products.product_id":1})
+
+{ "products" : [ { "product_id" : 3, "name" : "dell xps 15" } ] }
+{ "products" : [ { "product_id" : 5, "name" : "nintendo" }, { "product_id" : 7, "name" : "ibm" } ] }
+{ "products" : [ { "product_id" : 1, "name" : "iphone" } ] }
+{ "products" : [ { "product_id" : 2, "name" : "macbook pro" } ] }
+
+
+
+
+
+
+
+
+
