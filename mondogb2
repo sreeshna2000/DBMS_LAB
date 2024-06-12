@@ -85,6 +85,14 @@ db.categories.aggregate([{$group:{"_id":{"category_id":"$category_id","name":"$n
 { "_id" : { "category_id" : 4, "name" : "iphone" } }
 { "_id" : { "category_id" : 3, "name" : "consoles" } }
 
+> db.categories.aggregate([{$unwind:"$products"},{$group:{"_id":"$category_id","total_products":{$sum:1}}},{$project:{"id":1,"total_products":1}}])
+{ "_id" : 2, "total_products" : 1 }
+{ "_id" : 3, "total_products" : 2 }
+{ "_id" : 5, "total_products" : 1 }
+{ "_id" : 4, "total_products" : 1 }
+> 
+
+
 
 
 
